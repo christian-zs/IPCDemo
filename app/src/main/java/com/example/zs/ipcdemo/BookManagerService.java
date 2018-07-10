@@ -56,7 +56,7 @@ public class BookManagerService extends Service {
 
         @Override
         public void unregisterListener(IOnNewBookArrivedListener listener) throws RemoteException {
-            boolean success =  mRemoteCallbackList.unregister(listener);
+            boolean success = mRemoteCallbackList.unregister(listener);
             if (success) {
                 Log.d(TAG, "unregister success.");
             } else {
