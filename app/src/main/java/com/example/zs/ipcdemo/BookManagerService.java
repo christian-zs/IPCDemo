@@ -24,30 +24,30 @@ public class BookManagerService extends Service {
 
     private static final String TAG = "BMS";
 
-
-    private AtomicBoolean mIsServiceDestoryed = new AtomicBoolean(false);
-    // 所有书籍
+    // 标记当前服务是否销毁（自带异步锁）
+    private AtomicBoolean mIsServiceDestroyed = new AtomicBoolean(false);
+    // 所有书籍 （自带异步锁）
     private CopyOnWriteArrayList<Book> mBooks = new CopyOnWriteArrayList<>();
-    // 注销监听
+    // 注销监听 系统专门提供跨进程删除 listener 接口的
     private RemoteCallbackList<IOnNewBookArrivedListener> mRemoteCallbackList = new RemoteCallbackList<>();
 
 
     private Binder mBinder = new IBookManager.Stub() {
         @Override
-        public List<Book> getBookList() throws RemoteException {
+        public List<Book> getBookList() {
             return mBooks;
         }
 
         @Override
-        public void addBook(Book book) throws RemoteException {
+        public void addBook(Book book) {
             if (book != null) {
                 mBooks.add(book);
-                Log.d(TAG, "添加图书成功，图书的数量为：" + mBooks.size());
+                Log.d(TAG, "book size:" + mBooks.size());
             }
         }
 
         @Override
-        public void registerListener(IOnNewBookArrivedListener listener) throws RemoteException {
+        public void registerListener(IOnNewBookArrivedListener listener) {
             mRemoteCallbackList.register(listener);
             final int N = mRemoteCallbackList.beginBroadcast();
             mRemoteCallbackList.finishBroadcast();
@@ -55,7 +55,7 @@ public class BookManagerService extends Service {
         }
 
         @Override
-        public void unregisterListener(IOnNewBookArrivedListener listener) throws RemoteException {
+        public void unregisterListener(IOnNewBookArrivedListener listener) {
             boolean success = mRemoteCallbackList.unregister(listener);
             if (success) {
                 Log.d(TAG, "unregister success.");
@@ -83,7 +83,7 @@ public class BookManagerService extends Service {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mIsServiceDestoryed.set(true);
+        mIsServiceDestroyed.set(true);
     }
 
     @Nullable
@@ -92,7 +92,7 @@ public class BookManagerService extends Service {
         return mBinder;
     }
 
-    private void onNewBookArrived(Book book) throws RemoteException {
+    private void onNewBookArrived(Book book) {
         mBooks.add(book);
         final int N = mRemoteCallbackList.beginBroadcast();
         for (int i = 0; i < N; i++) {
@@ -112,16 +112,14 @@ public class BookManagerService extends Service {
 
         @Override
         public void run() {
-            while (!mIsServiceDestoryed.get()) {
+            while (!mIsServiceDestroyed.get()) {
                 try {
                     Thread.sleep(5000);
                     String bookId = String.valueOf(mBooks.size() + 1);
                     Book book = new Book(bookId, "新书：" + bookId);
-                    Log.d(TAG, "新书：" + bookId);
+                    Log.d(TAG, "book name：" + bookId);
                     onNewBookArrived(book);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (RemoteException e) {
                     e.printStackTrace();
                 }
             }

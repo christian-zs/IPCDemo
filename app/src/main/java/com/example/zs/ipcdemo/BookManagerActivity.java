@@ -36,7 +36,7 @@ public class BookManagerActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MESSAGE_NEW_BOOK_ARRIVED:
-                    Log.d(TAG, "收到新的图书 :" + msg.obj);
+                    Log.d(TAG, "arrived new book :" + msg.obj);
                     break;
                 default:
                     super.handleMessage(msg);
@@ -48,27 +48,30 @@ public class BookManagerActivity extends AppCompatActivity {
     private ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(final ComponentName name, IBinder service) {
+            //  IBinder 通过 asInterface 判断
+            // asInterface方法的作用是判断参数——也就是IBinder对象，和自己是否在同一个进程：
+            //  是: 则直接转换、直接使用，接下来就跟 Binder 跨进程通信无关啦
+            //  否: 则把这个IBinder参数包装成一个 Proxy 对象，这时调用 Stub 的方法，间接调用Proxy的方法
             IBookManager bookManager = IBookManager.Stub.asInterface(service);
             try {
                 mBookManager = bookManager;
                 bookManager.getBookList();
-                Log.d(TAG, "客户端获取到图书数量为：" + bookManager.getBookList().size());
+                Log.d(TAG, "get books count：" + bookManager.getBookList().size());
                 bookManager.registerListener(arrivedListener);
             } catch (RemoteException e) {
                 e.printStackTrace();
             }
-
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
-
+            mBookManager = null;
         }
     };
-
+    // 新书通知监听
     private IOnNewBookArrivedListener arrivedListener = new IOnNewBookArrivedListener.Stub() {
         @Override
-        public void onNewBookArrived(Book newBook) throws RemoteException {
+        public void onNewBookArrived(Book newBook) {
 
             mHandler.obtainMessage(MESSAGE_NEW_BOOK_ARRIVED, newBook).sendToTarget();
         }
