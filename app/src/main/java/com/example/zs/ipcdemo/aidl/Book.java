@@ -64,5 +64,4 @@ public class Book implements Parcelable {
             return new Book[size];
         }
     };
-
 }
