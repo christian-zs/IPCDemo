@@ -27,6 +27,10 @@ public class Book implements Parcelable {
         return CREATOR;
     }
 
+    public Book() {
+
+    }
+
     public Book(String bookId, String bookName) {
         this.bookId = bookId;
         this.bookName = bookName;

@@ -49,7 +49,7 @@ public class BookManagerActivity extends AppCompatActivity {
         @Override
         public void onServiceConnected(final ComponentName name, IBinder service) {
             //  IBinder 通过 asInterface 判断
-            //  asInterface方法的作用是判断参数——也就是IBinder对象，和自己是否在同一个进程：
+            // asInterface方法的作用是判断参数——也就是IBinder对象，和自己是否在同一个进程：
             //  是: 则直接转换、直接使用，接下来就跟 Binder 跨进程通信无关啦
             //  否: 则把这个IBinder参数包装成一个 Proxy 对象，这时调用 Stub 的方法，间接调用Proxy的方法
             IBookManager bookManager = IBookManager.Stub.asInterface(service);
@@ -71,7 +71,7 @@ public class BookManagerActivity extends AppCompatActivity {
     // 新书通知监听
     private IOnNewBookArrivedListener arrivedListener = new IOnNewBookArrivedListener.Stub() {
         @Override
-        public void onNewBookArrived(Book newBook) {
+        public void onNewBookArrived(Book newBook) throws RemoteException {
 
             mHandler.obtainMessage(MESSAGE_NEW_BOOK_ARRIVED, newBook).sendToTarget();
         }
@@ -82,7 +82,7 @@ public class BookManagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book_manager);
         Intent intent = new Intent(BookManagerActivity.this, BookManagerService.class);
-        bindService(intent, connection, Context.BIND_AUTO_CREATE);
+        this.bindService(intent, connection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -91,12 +91,13 @@ public class BookManagerActivity extends AppCompatActivity {
         // 注销连接
         unbindService(connection);
         // 注销新书提醒
-        assert mBookManager != null;
-        if (mBookManager.asBinder().isBinderAlive()) {
-            try {
-                mBookManager.unregisterListener(arrivedListener);
-            } catch (RemoteException e) {
-                e.printStackTrace();
+        if (mBookManager != null) {
+            if (mBookManager.asBinder().isBinderAlive()) {
+                try {
+                    mBookManager.unregisterListener(arrivedListener);
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

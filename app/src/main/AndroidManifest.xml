@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.zs.ipcdemo">
 
+
+    <permission
+        android:name="com.example.zs.ipcdemo.permission.ACCESS_BOOK_SERVIC"
+        android:protectionLevel="normal" />
+    <uses-permission android:name="com.example.zs.ipcdemo.permission.ACCESS_BOOK_SERVIC"/>
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -20,10 +26,21 @@
             </intent-filter>
         </activity>
         <activity android:name=".MessengerActivity" />
+
         <activity android:name=".BookManagerActivity" />
 
-        <service
-            android:name=".BookManagerService"
-            android:process=":remote" />
+        <activity android:name=".provider.ProviderActivity" />
+
+        <provider
+            android:name=".provider.BookProvider"
+            android:authorities="com.ryg.chapter_2.book.provider"
+            android:permission="com.ryg.PROVIDER"
+            android:process=":provider" />
+
+        <service android:name=".BookManagerService"
+            android:process=":remote"
+            android:permission="com.example.zs.ipcdemo.permission.ACCESS_BOOK_SERVIC">
+
+        </service>
     </application>
 </manifest>

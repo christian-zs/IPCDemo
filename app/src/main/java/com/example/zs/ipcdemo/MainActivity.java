@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.zs.ipcdemo.provider.ProviderActivity;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -35,6 +37,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, BookManagerActivity.class);
+                startActivity(intent);
+            }
+        });
+        // Provider
+        AppCompatButton provider = findViewById(R.id.provider);
+        provider.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, ProviderActivity.class);
                 startActivity(intent);
             }
         });

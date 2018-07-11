@@ -1,9 +1,12 @@
 package com.example.zs.ipcdemo;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Binder;
 import android.os.IBinder;
+import android.os.Parcel;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.support.annotation.Nullable;
@@ -33,6 +36,31 @@ public class BookManagerService extends Service {
 
 
     private Binder mBinder = new IBookManager.Stub() {
+        @Override
+        public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
+            // 权限校验
+            String packageName = null;
+            String[] packages = getPackageManager().
+                    getPackagesForUid(getCallingUid());
+            if (packages != null && packages.length > 0) {
+                packageName = packages[0];
+            }
+            if (packageName == null) {
+                return false;
+            }
+            boolean checkPermission = checkPermission(getApplication(),
+                    "com.example.zs.ipcdemo.permission.ACCESS_BOOK_SERVIC", packageName);
+            return checkPermission && super.onTransact(code, data, reply, flags);
+        }
+        private boolean checkPermission(Context context, String permName, String pkgName) {
+            PackageManager pm = context.getPackageManager();
+            if (PackageManager.PERMISSION_GRANTED == pm.checkPermission(permName, pkgName)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         @Override
         public List<Book> getBookList() {
             return mBooks;
