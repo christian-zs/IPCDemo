@@ -36,12 +36,21 @@ public class BookManagerService extends Service {
 
 
     private Binder mBinder = new IBookManager.Stub() {
+
+        private boolean checkPermission(Context context, String permName, String pkgName) {
+            PackageManager pm = context.getPackageManager();
+            if (PackageManager.PERMISSION_GRANTED == pm.checkPermission(permName, pkgName)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         @Override
         public boolean onTransact(int code, Parcel data, Parcel reply, int flags) throws RemoteException {
             // 权限校验
             String packageName = null;
-            String[] packages = getPackageManager().
-                    getPackagesForUid(getCallingUid());
+            String[] packages = getPackageManager().getPackagesForUid(getCallingUid());
             if (packages != null && packages.length > 0) {
                 packageName = packages[0];
             }
@@ -51,14 +60,6 @@ public class BookManagerService extends Service {
             boolean checkPermission = checkPermission(getApplication(),
                     "com.example.zs.ipcdemo.permission.ACCESS_BOOK_SERVIC", packageName);
             return checkPermission && super.onTransact(code, data, reply, flags);
-        }
-        private boolean checkPermission(Context context, String permName, String pkgName) {
-            PackageManager pm = context.getPackageManager();
-            if (PackageManager.PERMISSION_GRANTED == pm.checkPermission(permName, pkgName)) {
-                return true;
-            } else {
-                return false;
-            }
         }
 
         @Override
