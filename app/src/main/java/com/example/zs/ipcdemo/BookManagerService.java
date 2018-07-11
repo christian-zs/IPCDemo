@@ -37,6 +37,7 @@ public class BookManagerService extends Service {
 
     private Binder mBinder = new IBookManager.Stub() {
 
+        // 权限脚丫
         private boolean checkPermission(Context context, String permName, String pkgName) {
             PackageManager pm = context.getPackageManager();
             if (PackageManager.PERMISSION_GRANTED == pm.checkPermission(permName, pkgName)) {
