@@ -25,9 +25,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MessengerActivity" />
 
-        <activity android:name=".BookManagerActivity" />
+        <activity android:name=".aidl.BookManagerActivity" />
 
         <activity android:name=".provider.ProviderActivity" />
 
@@ -37,7 +36,7 @@
             android:permission="com.ryg.PROVIDER"
             android:process=":provider" />
 
-        <service android:name=".BookManagerService"
+        <service android:name=".aidl.BookManagerService"
             android:process=":remote"
             android:permission="com.example.zs.ipcdemo.permission.ACCESS_BOOK_SERVIC">
 

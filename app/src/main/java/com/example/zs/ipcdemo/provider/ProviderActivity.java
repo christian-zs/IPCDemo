@@ -31,7 +31,8 @@ public class ProviderActivity extends Activity {
         values.put("_id", 6);
         values.put("name", "程序设计的艺术");
         getContentResolver().insert(bookUri, values);
-        Cursor bookCursor = getContentResolver().query(bookUri, new String[]{"_id", "name"}, null, null, null);
+        Cursor bookCursor = getContentResolver().query(bookUri, new String[]{"_id", "name"},
+                null, null, null);
         while (bookCursor.moveToNext()) {
             Book book = new Book();
             book.setBookId(String.valueOf(bookCursor.getInt(0)));
@@ -41,7 +42,8 @@ public class ProviderActivity extends Activity {
         bookCursor.close();
 
         Uri userUri = Uri.parse("content://com.ryg.chapter_2.book.provider/user");
-        Cursor userCursor = getContentResolver().query(userUri, new String[]{"_id", "name", "sex"}, null, null, null);
+        Cursor userCursor = getContentResolver().query(userUri, new String[]{"_id", "name", "sex"},
+                null, null, null);
         while (userCursor.moveToNext()) {
             User user = new User();
             user.userId = userCursor.getInt(0);

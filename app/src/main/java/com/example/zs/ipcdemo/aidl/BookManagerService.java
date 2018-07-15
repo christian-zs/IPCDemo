@@ -1,4 +1,4 @@
-package com.example.zs.ipcdemo;
+package com.example.zs.ipcdemo.aidl;
 
 import android.app.Service;
 import android.content.Context;

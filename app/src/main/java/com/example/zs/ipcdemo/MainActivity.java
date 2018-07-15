@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.example.zs.ipcdemo.aidl.BookManagerActivity;
 import com.example.zs.ipcdemo.provider.ProviderActivity;
 
 public class MainActivity extends AppCompatActivity {
