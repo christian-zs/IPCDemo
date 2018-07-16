@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.example.zs.ipcdemo.aidl.BookManagerActivity;
+import com.example.zs.ipcdemo.pool.BinderPoolActivity;
 import com.example.zs.ipcdemo.provider.ProviderActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -47,6 +48,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, ProviderActivity.class);
+                startActivity(intent);
+            }
+        });
+        // Binder Pool
+        AppCompatButton binderPool = findViewById(R.id.binder_pool);
+        binderPool.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, BinderPoolActivity.class);
                 startActivity(intent);
             }
         });

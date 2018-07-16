@@ -2,5 +2,6 @@
     <string name="app_name">IPCDemo</string>
     <string name="action_settings">Settings</string>
     <string name="action_aidl">AIDL</string>
+    <string name="action_aidl_binder_pool">Binder Pool</string>
     <string name="action_provider">provider</string>
 </resources>

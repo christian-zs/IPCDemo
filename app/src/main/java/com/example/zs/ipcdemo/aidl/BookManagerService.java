@@ -12,10 +12,6 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.example.zs.ipcdemo.aidl.Book;
-import com.example.zs.ipcdemo.aidl.IBookManager;
-import com.example.zs.ipcdemo.aidl.IOnNewBookArrivedListener;
-
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;

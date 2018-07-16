@@ -67,6 +67,7 @@ public class BookManagerActivity extends AppCompatActivity {
             mBookManager = null;
         }
     };
+
     // 新书通知监听
     private IOnNewBookArrivedListener arrivedListener = new IOnNewBookArrivedListener.Stub() {
         @Override

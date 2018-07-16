@@ -6,7 +6,7 @@
     <permission
         android:name="com.example.zs.ipcdemo.permission.ACCESS_BOOK_SERVIC"
         android:protectionLevel="normal" />
-    <uses-permission android:name="com.example.zs.ipcdemo.permission.ACCESS_BOOK_SERVIC"/>
+    <uses-permission android:name="com.example.zs.ipcdemo.permission.ACCESS_BOOK_SERVIC" />
 
     <application
         android:allowBackup="true"
@@ -29,6 +29,8 @@
         <activity android:name=".aidl.BookManagerActivity" />
 
         <activity android:name=".provider.ProviderActivity" />
+        <!--Binder 池-->
+        <activity android:name=".pool.BinderPoolActivity" />
 
         <provider
             android:name=".provider.BookProvider"
@@ -36,10 +38,14 @@
             android:permission="com.ryg.PROVIDER"
             android:process=":provider" />
 
-        <service android:name=".aidl.BookManagerService"
-            android:process=":remote"
-            android:permission="com.example.zs.ipcdemo.permission.ACCESS_BOOK_SERVIC">
+        <service
+            android:name=".aidl.BookManagerService"
+            android:permission="com.example.zs.ipcdemo.permission.ACCESS_BOOK_SERVIC"
+            android:process=":remote" />
 
-        </service>
+
+        <service
+            android:name=".pool.BinderPoolService"
+            android:process=":binder_pool" />
     </application>
 </manifest>
